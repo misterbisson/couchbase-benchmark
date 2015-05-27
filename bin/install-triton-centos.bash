@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -x
+# "I would turn ‘set -o xtrace’, and reopen stderr to a log file""
 
 echo '#'
 echo '# Installing Couchbase'

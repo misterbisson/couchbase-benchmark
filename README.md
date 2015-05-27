@@ -34,6 +34,12 @@ Execute the installer:
 curl https://raw.githubusercontent.com/misterbisson/couchbase-benchmark/master/bin/install-triton-centos.bash | bash
 ```
 
+Then run some benchmarks:
+
+```bash
+/opt/couchbase/bin/cbworkloadgen -n 10.117.79.85:8091 -r .9 -i 100000 -s 100 --threads 10 -j
+```
+
 ### Joyent Triton virtual machine
 
 Create a VM running CentOS:
@@ -55,13 +61,19 @@ The `--script=./couchbase-install-triton-centos.bash` argument in the command st
 Lookup the IP address for this new instance and ssh in:
 
 ```bash
-ssh root@$(sdc-listmachines | json -a -c "this.name === 'couchbase-vm-benchmarks-1'" ips.1)
+ssh root@$(sdc-listmachines --url=https://us-east-2.api.joyent.com | json -a -c "this.name === 'couchbase-vm-benchmarks-1'" ips.1)
 ```
 
 Execute the installer:
 
 ```bash
 curl https://raw.githubusercontent.com/misterbisson/couchbase-benchmark/master/bin/install-triton-centos.bash | bash
+```
+
+Then run some benchmarks:
+
+```bash
+/opt/couchbase/bin/cbworkloadgen -n 10.117.79.85:8091 -r .9 -i 100000 -s 100 --threads 10 -j
 ```
 
 ### AWS
@@ -99,3 +111,16 @@ Execute the installer:
 ```bash
 curl https://raw.githubusercontent.com/misterbisson/couchbase-benchmark/master/bin/install-aws-amazonlinux.bash | sudo bash
 ```
+
+Then run some benchmarks:
+
+```bash
+/opt/couchbase/bin/cbworkloadgen -n 10.117.79.85:8091 -r .9 -i 100000 -s 100 --threads 10 -j
+```
+
+### Test elsewhere
+
+1. Create a machine somewhere. Select CentOS, RHEL, or similar for the base OS.
+2. SSH in to the machine
+3. Install: `curl https://raw.githubusercontent.com/misterbisson/couchbase-benchmark/master/bin/install-generic-centos.bash | sudo bash`
+4. Run some benchmarks: xxx
