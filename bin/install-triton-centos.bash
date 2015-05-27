@@ -22,18 +22,18 @@ MYIPPUBLIC=$(ip addr show eth1 | grep -o '[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3
 MYMEMORY=$(free -m | grep -o "Mem:\s*[0-9]*" | grep -o "[0-9]*")
 MYMEMORY=$(echo "$MYMEMORY*.80" | bc | grep -o "^[^\.]*")
 
-couchbase-cli node-init -c 127.0.0.1:8091 -u access -p password \
+/opt/couchbase/bin/couchbase-cli node-init -c 127.0.0.1:8091 -u access -p password \
     --node-init-data-path=/opt/couchbase/var/lib/couchbase/data \
     --node-init-index-path=/opt/couchbase/var/lib/couchbase/data \
     --node-init-hostname=$MYIPPRIVATE
 
-couchbase-cli cluster-init -c 127.0.0.1:8091 -u access -p password \
+/opt/couchbase/bin/couchbase-cli cluster-init -c 127.0.0.1:8091 -u access -p password \
     --cluster-init-username=Administrator \
     --cluster-init-password=password \
     --cluster-init-port=8091 \
     --cluster-init-ramsize=$MYMEMORY
 
-couchbase-cli bucket-create -c 127.0.01:8091 -u Administrator -p password \
+/opt/couchbase/bin/couchbase-cli bucket-create -c 127.0.01:8091 -u Administrator -p password \
    --bucket=benchmarks \
    --bucket-type=couchbase \
    --bucket-ramsize=$MYMEMORY \
