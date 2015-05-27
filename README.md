@@ -9,7 +9,7 @@ curl -o couchbase-install-triton-centos.bash https://raw.githubusercontent.com/m
 sdc-createmachine \
     --name=couchbase-container-benchmarks-1 \
     --image=$(sdc-listimages | json -a -c "this.name === 'lx-centos-6'" id) \
-    --package=$(sdc-listpackages | json -a -c '/^g/.test(this.name)' -c '/[^(kvm)]$/.test(this.name)' -c "this.memory === 4096" id) \
+    --package=$(sdc-listpackages | json -a -c '/^g/.test(this.name)' -c '/standard/.test(this.name)' -c '/[^(kvm)]$/.test(this.name)' -c "this.memory === 4096" id) \
     --networks=$(sdc-listnetworks | json -a -c "this.name ==='Joyent-SDC-Private'" id) \
     --networks=$(sdc-listnetworks | json -a -c "this.name ==='Joyent-SDC-Public'" id) \
     --script=./couchbase-install-triton-centos.bash
@@ -40,7 +40,7 @@ curl -o couchbase-install-triton-centos.bash https://raw.githubusercontent.com/m
 sdc-createmachine \
     --name=couchbase-vm-benchmarks-1 \
     --image=$(sdc-listimages | json -a -c "this.name === 'lx-centos-6'" id) \
-    --package=$(sdc-listpackages | json -a -c '/^g/.test(this.name)' -c '/(kvm)$/.test(this.name)' -c "this.memory === 4096" id) \
+    --package=$(sdc-listpackages | json -a -c '/^g/.test(this.name)' -c '/standard/.test(this.name)' -c '/(kvm)$/.test(this.name)' -c "this.memory === 4096" id) \
     --networks=$(sdc-listnetworks | json -a -c "this.name ==='Joyent-SDC-Private'" id) \
     --networks=$(sdc-listnetworks | json -a -c "this.name ==='Joyent-SDC-Public'" id) \
     --script=./couchbase-install-triton-centos.bash

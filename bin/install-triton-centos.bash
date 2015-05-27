@@ -26,18 +26,21 @@ MYMEMORY=$(echo "$MYMEMORY*.80" | bc | grep -o "^[^\.]*")
     --node-init-data-path=/opt/couchbase/var/lib/couchbase/data \
     --node-init-index-path=/opt/couchbase/var/lib/couchbase/data \
     --node-init-hostname=$MYIPPRIVATE
+echo "Node init" >> ~/couchbaseinstalled.txt
 
 /opt/couchbase/bin/couchbase-cli cluster-init -c 127.0.0.1:8091 -u access -p password \
     --cluster-init-username=Administrator \
     --cluster-init-password=password \
     --cluster-init-port=8091 \
     --cluster-init-ramsize=$MYMEMORY
+echo "Cluster init" >> ~/couchbaseinstalled.txt
 
 /opt/couchbase/bin/couchbase-cli bucket-create -c 127.0.01:8091 -u Administrator -p password \
    --bucket=benchmarks \
    --bucket-type=couchbase \
    --bucket-ramsize=$MYMEMORY \
    --bucket-replica=1
+echo "Bucket init" >> ~/couchbaseinstalled.txt
 
 echo '#'
 echo '# Installed and configured'
@@ -47,4 +50,4 @@ echo '# username=Administrator'
 echo '# password=password'
 echo '#'
 
-echo "Couchbase is installed\nhttp://$MYIPPUBLIC:8091" > ~/couchbaseinstalled.txt
+echo "Couchbase is installed, http://$MYIPPUBLIC:8091" >> ~/couchbaseinstalled.txt
