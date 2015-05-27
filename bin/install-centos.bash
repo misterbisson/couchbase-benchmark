@@ -4,24 +4,25 @@ echo '#'
 echo '# Installing Couchbase'
 echo '#'
 
-export CB_VERSION=3.0.1
-export CB_RELEASE_URL=http://packages.couchbase.com/releases
-export CB_PACKAGE=couchbase-server-community-3.0.1-centos6.x86_64.rpm
-export PATH=$PATH:/opt/couchbase/bin:/opt/couchbase/bin/tools:/opt/couchbase/bin/install
+CB_VERSION=3.0.1
+CB_RELEASE_URL=http://packages.couchbase.com/releases
+CB_PACKAGE=couchbase-server-community-3.0.1-centos6.x86_64.rpm
+PATH=$PATH:/opt/couchbase/bin:/opt/couchbase/bin/tools:/opt/couchbase/bin/install
 rpm --install $CB_RELEASE_URL/$CB_VERSION/$CB_PACKAGE
 
 echo '#'
 echo '# Configuring Couchbase'
 echo '#'
 
-export MYIP=$(ip addr show eth0 | grep -o '[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}')
-export MYMEMORY=$(free -m | grep -o "Mem:\s*[0-9]*" | grep -o "[0-9]*")
-export MYMEMORY=$(echo "$MYMEMORY*.80" | bc | grep -o "^[^\.]*")
+MYIPPRIVATE=$(ip addr show eth0 | grep -o '[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}')
+MYIPPUBLIC=$(ip addr show eth1 | grep -o '[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}')
+MYMEMORY=$(free -m | grep -o "Mem:\s*[0-9]*" | grep -o "[0-9]*")
+MYMEMORY=$(echo "$MYMEMORY*.80" | bc | grep -o "^[^\.]*")
 
 couchbase-cli node-init -c 127.0.0.1:8091 -u access -p password \
     --node-init-data-path=/opt/couchbase/var/lib/couchbase/data \
     --node-init-index-path=/opt/couchbase/var/lib/couchbase/data \
-    --node-init-hostname=$MYIP
+    --node-init-hostname=$MYIPPRIVATE
 
 couchbase-cli cluster-init -c 127.0.0.1:8091 -u access -p password \
     --cluster-init-username=Administrator \
@@ -38,7 +39,7 @@ couchbase-cli bucket-create -c 127.0.01:8091 -u Administrator -p password \
 echo '#'
 echo '# Installed and configured'
 echo '#'
-echo "# Couchbase dashboard: $MYIP:8091"
+echo "# Couchbase dashboard: $MYIPPUBLIC:8091"
 echo '# username=Administrator'
 echo '# password=password'
 echo '#'
