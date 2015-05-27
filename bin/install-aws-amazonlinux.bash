@@ -37,7 +37,7 @@ MYMEMORY=$(echo "$MYMEMORY*.80" | bc | grep -o "^[^\.]*")
     --cluster-init-ramsize=$MYMEMORY
 
 /opt/couchbase/bin/couchbase-cli bucket-create -c 127.0.01:8091 -u Administrator -p password \
-   --bucket=benchmarks \
+   --bucket=default \
    --bucket-type=couchbase \
    --bucket-ramsize=$MYMEMORY \
    --bucket-replica=1
