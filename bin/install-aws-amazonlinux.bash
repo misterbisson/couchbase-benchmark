@@ -11,10 +11,10 @@ PATH=$PATH:/opt/couchbase/bin:/opt/couchbase/bin/tools:/opt/couchbase/bin/instal
 rpm --install $CB_RELEASE_URL/$CB_VERSION/$CB_PACKAGE
 
 echo '#'
-echo '# Waiting 7 seconds for the service to start'
+echo '# Waiting 13 seconds for the service to start'
 echo '#'
 
-sleep 7
+sleep 13
 
 echo '#'
 echo '# Configuring Couchbase'
