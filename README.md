@@ -61,3 +61,33 @@ Execute the installer:
 ```bash
 curl https://raw.githubusercontent.com/misterbisson/couchbase-benchmark/master/bin/install-triton-centos.bash | bash
 ```
+
+### AWS
+
+Create a VM running CentOS:
+
+```bash
+export AWSKEYNAME=my-aws-key-name
+aws ec2 create-security-group --group-name couchbase-benchmarks --description "For benchmarking Couchbase, opens ports that should not be open in production"
+aws ec2 authorize-security-group-ingress --group-name couchbase-benchmarks --protocol tcp --port 22 --cidr 0.0.0.0/0
+aws ec2 authorize-security-group-ingress --group-name couchbase-benchmarks --protocol tcp --port 8091 --cidr 0.0.0.0/0
+AWSIID=$(aws ec2 run-instances \
+    --image-id ami-e7527ed7 \
+    --count 1 \
+    --instance-type c4.xlarge \
+    --key-name $AWSKEYNAME \
+    --security-group-ids $(aws ec2 describe-security-groups --group-names couchbase-benchmarks | json -a SecurityGroups.0.GroupId) | \
+json -aH Instances.0.InstanceId)
+```
+
+Then ssh in:
+
+```bash
+ssh ec2-user@$(aws ec2 describe-instances --instance-ids $AWSIID | json -a Reservations.0.Instances.0.PublicDnsName)
+```
+
+Execute the installer:
+
+```bash
+curl https://raw.githubusercontent.com/misterbisson/couchbase-benchmark/master/bin/install-triton-centos.bash | bash
+```
