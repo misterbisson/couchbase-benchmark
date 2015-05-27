@@ -1,0 +1,50 @@
+# Couchbase Cloud Benchmarks
+
+### Joyent Triton
+
+Create an infrastructure container running container-optimize CentOS:
+
+```bash
+sdc-createmachine \
+    --name=couchbase-cloud-benchmarks-1 \
+    --image=$(sdc-listimages | json -a -c "this.name === 'lx-centos-6'" id) \
+    --package=$(sdc-listpackages | json -a -c '/^g/.test(this.name)' -c '/[^(kvm)]$/.test(this.name)' -c "this.memory === 1024" id) \
+    --networks=$(sdc-listnetworks | json -a -c "this.name ==='Joyent-SDC-Private'" id) \
+    --networks=$(sdc-listnetworks | json -a -c "this.name ==='Joyent-SDC-Public'" id)
+```
+
+Install Couchbase
+
+```bash
+export CB_VERSION=3.0.1
+export CB_RELEASE_URL=http://packages.couchbase.com/releases
+export CB_PACKAGE=couchbase-server-community-3.0.1-centos6.x86_64.rpm
+export PATH=$PATH:/opt/couchbase/bin:/opt/couchbase/bin/tools:/opt/couchbase/bin/install
+rpm --install $CB_RELEASE_URL/$CB_VERSION/$CB_PACKAGE
+```
+
+Configure
+
+```bash
+export MYIP=$(ip addr show eth0 | grep -o '[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}')
+export MYMEMORY=$(free -m | grep -o "Mem:\s*[0-9]*" | grep -o "[0-9]*")
+export MYMEMORY=$(echo "$MYMEMORY*.80" | bc | grep -o "^[^\.]*")
+
+couchbase-cli node-init -c 127.0.0.1:8091 -u access -p password \
+    --node-init-data-path=/opt/couchbase/var/lib/couchbase/data \
+    --node-init-index-path=/opt/couchbase/var/lib/couchbase/data \
+    --node-init-hostname=$MYIP
+
+couchbase-cli cluster-init -c 127.0.0.1:8091 -u access -p password \
+    --cluster-init-username=Administrator \
+    --cluster-init-password=password \
+    --cluster-init-port=8091 \
+    --cluster-init-ramsize=$MYMEMORY
+
+couchbase-cli bucket-create -c 127.0.01:8091 -u Administrator -p password \
+   --bucket=benchmarks \
+   --bucket-type=couchbase \
+   --bucket-ramsize=$MYMEMORY \
+   --bucket-replica=1
+```
+
