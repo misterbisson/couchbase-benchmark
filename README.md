@@ -1,5 +1,9 @@
 # Couchbase Benchmarks
 
+Install and benchmark Couchbase on various infrastructure providers.
+
+See details for how to execute on various providers below. The default resource size is selected by price, with a goal to hit $0.120/hour or less. This typically selects for containers with about 4GB of RAM, though the number of CPUs varies. Feel free to change and test different resource sizes.
+
 ### Joyent Triton infrastructure container
 
 Create an infrastructure container running container-optimize CentOS:
@@ -7,7 +11,7 @@ Create an infrastructure container running container-optimize CentOS:
 ```bash
 curl -o couchbase-install-triton-centos.bash https://raw.githubusercontent.com/misterbisson/couchbase-benchmark/master/bin/install-triton-centos.bash
 sdc-createmachine \
-    --url=https://us-east-3b.api.joyent.com
+    --url=https://us-east-3b.api.joyent.com  \
     --name=couchbase-container-benchmarks-1 \
     --image=$(sdc-listimages --url=https://us-east-3b.api.joyent.com | json -a -c "this.name === 'lx-centos-6'" id) \
     --package=$(sdc-listpackages --url=https://us-east-3b.api.joyent.com | json -a -c "this.memory === 4096" id) \
@@ -16,14 +20,12 @@ sdc-createmachine \
     --script=./couchbase-install-triton-centos.bash
 ```
 
-Install Couchbase
-
 The `--script=./couchbase-install-triton-centos.bash` argument in the command string above _should_ install it, but that doesn't seem to be working now. Instead, ssh in and manually execute the installer script.
 
 Lookup the IP address for this new instance and ssh in:
 
 ```bash
-ssh root@$(sdc-listmachines | json -a -c "this.name === 'couchbase-container-benchmarks-1'" ips.1)
+ssh root@$(sdc-listmachines --url=https://us-east-3b.api.joyent.com | json -a -c "this.name === 'couchbase-container-benchmarks-1'" ips.1)
 ```
 
 Execute the installer:
@@ -39,7 +41,7 @@ Create a VM running CentOS:
 ```bash
 curl -o couchbase-install-triton-centos.bash https://raw.githubusercontent.com/misterbisson/couchbase-benchmark/master/bin/install-triton-centos.bash
 sdc-createmachine \
-    --url=https://us-east-2.api.joyent.com
+    --url=https://us-east-2.api.joyent.com \
     --name=couchbase-vm-benchmarks-1 \
     --image=$(sdc-listimages --url=https://us-east-2.api.joyent.com | json -a -c "this.name === 'lx-centos-6'" id) \
     --package=$(sdc-listpackages --url=https://us-east-2.api.joyent.com | json -a -c '/^g/.test(this.name)' -c '/standard/.test(this.name)' -c '/(kvm)$/.test(this.name)' -c "this.memory === 4096" id) \
@@ -47,8 +49,6 @@ sdc-createmachine \
     --networks=$(sdc-listnetworks --url=https://us-east-2.api.joyent.com | json -a -c "this.name ==='Joyent-SDC-Public'" id) \
     --script=./couchbase-install-triton-centos.bash
 ```
-
-Install Couchbase
 
 The `--script=./couchbase-install-triton-centos.bash` argument in the command string above _should_ install it, but that doesn't seem to be working now. Instead, ssh in and manually execute the installer script.
 
@@ -88,7 +88,7 @@ AWSIID=$(aws ec2 run-instances \
 json -aH Instances.0.InstanceId)
 ```
 
-Then ssh in:
+Then ssh in to the newly created instance:
 
 ```bash
 ssh ec2-user@$(aws ec2 describe-instances --instance-ids $AWSIID | json -a Reservations.0.Instances.0.PublicDnsName)
