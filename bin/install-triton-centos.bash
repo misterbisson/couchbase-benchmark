@@ -42,7 +42,9 @@ MYMEMORY=$(echo "$MYMEMORY*.80" | bc | grep -o "^[^\.]*")
 echo '#'
 echo '# Installed and configured'
 echo '#'
-echo "# Couchbase dashboard: $MYIPPUBLIC:8091"
+echo "# Couchbase dashboard: http://$MYIPPUBLIC:8091"
 echo '# username=Administrator'
 echo '# password=password'
 echo '#'
+
+echo "Couchbase is installed\nhttp://$MYIPPUBLIC:8091" > ~/couchbaseinstalled.txt
