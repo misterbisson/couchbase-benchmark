@@ -10,6 +10,9 @@ CB_PACKAGE=couchbase-server-community-3.0.1-centos6.x86_64.rpm
 PATH=$PATH:/opt/couchbase/bin:/opt/couchbase/bin/tools:/opt/couchbase/bin/install
 rpm --install $CB_RELEASE_URL/$CB_VERSION/$CB_PACKAGE
 
+# sleep just a moment to let the installation settle
+sleep 1
+
 echo '#'
 echo '# Configuring Couchbase'
 echo '#'
