@@ -7,11 +7,12 @@ Create an infrastructure container running container-optimize CentOS:
 ```bash
 curl -o couchbase-install-triton-centos.bash https://raw.githubusercontent.com/misterbisson/couchbase-benchmark/master/bin/install-triton-centos.bash
 sdc-createmachine \
+    --url=https://us-east-3b.api.joyent.com
     --name=couchbase-container-benchmarks-1 \
-    --image=$(sdc-listimages | json -a -c "this.name === 'lx-centos-6'" id) \
-    --package=$(sdc-listpackages | json -a -c '/^g/.test(this.name)' -c '/standard/.test(this.name)' -c '/[^(kvm)]$/.test(this.name)' -c "this.memory === 4096" id) \
-    --networks=$(sdc-listnetworks | json -a -c "this.name ==='Joyent-SDC-Private'" id) \
-    --networks=$(sdc-listnetworks | json -a -c "this.name ==='Joyent-SDC-Public'" id) \
+    --image=$(sdc-listimages --url=https://us-east-3b.api.joyent.com | json -a -c "this.name === 'lx-centos-6'" id) \
+    --package=$(sdc-listpackages --url=https://us-east-3b.api.joyent.com | json -a -c "this.memory === 4096" id) \
+    --networks=$(sdc-listnetworks --url=https://us-east-3b.api.joyent.com | json -a -c "this.name ==='default'" id) \
+    --networks=$(sdc-listnetworks --url=https://us-east-3b.api.joyent.com | json -a -c "this.name ==='Joyent-SDC-Public'" id) \
     --script=./couchbase-install-triton-centos.bash
 ```
 
@@ -38,11 +39,12 @@ Create a VM running CentOS:
 ```bash
 curl -o couchbase-install-triton-centos.bash https://raw.githubusercontent.com/misterbisson/couchbase-benchmark/master/bin/install-triton-centos.bash
 sdc-createmachine \
+    --url=https://us-east-2.api.joyent.com
     --name=couchbase-vm-benchmarks-1 \
-    --image=$(sdc-listimages | json -a -c "this.name === 'lx-centos-6'" id) \
-    --package=$(sdc-listpackages | json -a -c '/^g/.test(this.name)' -c '/standard/.test(this.name)' -c '/(kvm)$/.test(this.name)' -c "this.memory === 4096" id) \
-    --networks=$(sdc-listnetworks | json -a -c "this.name ==='Joyent-SDC-Private'" id) \
-    --networks=$(sdc-listnetworks | json -a -c "this.name ==='Joyent-SDC-Public'" id) \
+    --image=$(sdc-listimages --url=https://us-east-2.api.joyent.com | json -a -c "this.name === 'lx-centos-6'" id) \
+    --package=$(sdc-listpackages --url=https://us-east-2.api.joyent.com | json -a -c '/^g/.test(this.name)' -c '/standard/.test(this.name)' -c '/(kvm)$/.test(this.name)' -c "this.memory === 4096" id) \
+    --networks=$(sdc-listnetworks --url=https://us-east-2.api.joyent.com | json -a -c "this.name ==='Joyent-SDC-Private'" id) \
+    --networks=$(sdc-listnetworks --url=https://us-east-2.api.joyent.com | json -a -c "this.name ==='Joyent-SDC-Public'" id) \
     --script=./couchbase-install-triton-centos.bash
 ```
 
@@ -67,14 +69,20 @@ curl https://raw.githubusercontent.com/misterbisson/couchbase-benchmark/master/b
 Create a VM running CentOS:
 
 ```bash
+# Keyname and instance type
 export AWSKEYNAME=my-aws-key-name
+export AWSINSTANCETYPE=c4.large
+
+# Creating a security group for testing
 aws ec2 create-security-group --group-name couchbase-benchmarks --description "For benchmarking Couchbase, opens ports that should not be open in production"
 aws ec2 authorize-security-group-ingress --group-name couchbase-benchmarks --protocol tcp --port 22 --cidr 0.0.0.0/0
 aws ec2 authorize-security-group-ingress --group-name couchbase-benchmarks --protocol tcp --port 8091 --cidr 0.0.0.0/0
+
+# Creating the VM instance
 AWSIID=$(aws ec2 run-instances \
     --image-id ami-e7527ed7 \
     --count 1 \
-    --instance-type c4.xlarge \
+    --instance-type $AWSINSTANCETYPE \
     --key-name $AWSKEYNAME \
     --security-group-ids $(aws ec2 describe-security-groups --group-names couchbase-benchmarks | json -a SecurityGroups.0.GroupId) | \
 json -aH Instances.0.InstanceId)
@@ -89,5 +97,5 @@ ssh ec2-user@$(aws ec2 describe-instances --instance-ids $AWSIID | json -a Reser
 Execute the installer:
 
 ```bash
-curl https://raw.githubusercontent.com/misterbisson/couchbase-benchmark/master/bin/install-triton-centos.bash | bash
+curl https://raw.githubusercontent.com/misterbisson/couchbase-benchmark/master/bin/install-aws-amazonlinux.bash | sudo bash
 ```
