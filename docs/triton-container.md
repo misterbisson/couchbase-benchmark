@@ -14,7 +14,13 @@ sdc-createmachine \
 
 ### Install and configure Couchbase
 
-Lookup the IP address for this new instance and ssh in:
+Lookup the IP address for this new instance:
+
+```bash
+sdc-listmachines --url=https://us-east-3b.api.joyent.com | json -a -c "this.name === 'couchbase-container-benchmarks-1'" ips.1
+```
+
+...or look it up and and ssh in one step:
 
 ```bash
 ssh root@$(sdc-listmachines --url=https://us-east-3b.api.joyent.com | json -a -c "this.name === 'couchbase-container-benchmarks-1'" ips.1)
