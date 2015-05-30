@@ -54,5 +54,3 @@ echo "# Couchbase dashboard: http://$MYIPPUBLIC:8091"
 echo '# username=Administrator'
 echo '# password=password'
 echo '#'
-
-echo "Couchbase is installed, http://$MYIPPUBLIC:8091" > ~/couchbaseinstalled.txt
