@@ -9,6 +9,5 @@ See details for how to execute on various providers below. The default resource 
 Different infrastructures will likely exhibit different performance characteristics and often have specific installation requirements. Detailed guides are provided for the following:
 
 1. [Joyent Triton infrastructure container](./docs/triton-container.md)
-1. [Joyent Triton virtual machine](./docs/triton-vm.md)
 1. [AWS virtual machine](./docs/aws-vm.md)
 1. [Generic instructions](./docs/generic-unk.md)

@@ -1,6 +1,17 @@
 #!/bin/bash
 
-# "I would turn ‘set -o xtrace’, and reopen stderr to a log file""
+# "I would turn ‘set -o xtrace’, and reopen stderr to a log file"
+
+# Figure out memory and cpu resources
+MYIPPRIVATE=$(ip addr show eth0 | grep -o '[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}')
+MYIPPUBLIC=$(ip addr show eth1 | grep -o '[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}')
+MYMEMORY=$(free -m | grep -o "Mem:\s*[0-9]*" | grep -o "[0-9]*")
+MYCPUS=$(nproc)
+MYCPUS=$(($MYCPUS>12?$(($MYMEMORY/2048)):$MYCPUS))
+MYCPUS=$(($MYCPUS>1?$MYCPUS:1))
+export COUCHBASE_NS_SERVER_VM_EXTRA_ARGS='["+S", "$($MYCPUS)"]'
+export ERL_AFLAGS="+S $MYCPUS"
+MYMEMORY=$(echo "$MYMEMORY*.80" | bc | grep -o "^[^\.]*")
 
 echo '#'
 echo '# Installing Couchbase'
@@ -18,11 +29,6 @@ sleep 1
 echo '#'
 echo '# Configuring Couchbase'
 echo '#'
-
-MYIPPRIVATE=$(ip addr show eth0 | grep -o '[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}')
-MYIPPUBLIC=$(ip addr show eth1 | grep -o '[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}')
-MYMEMORY=$(free -m | grep -o "Mem:\s*[0-9]*" | grep -o "[0-9]*")
-MYMEMORY=$(echo "$MYMEMORY*.80" | bc | grep -o "^[^\.]*")
 
 /opt/couchbase/bin/couchbase-cli node-init -c 127.0.0.1:8091 -u access -p password \
     --node-init-data-path=/opt/couchbase/var/lib/couchbase/data \
