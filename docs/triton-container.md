@@ -23,7 +23,8 @@ ssh root@$(sdc-listmachines --url=https://us-east-3b.api.joyent.com | json -a -c
 Execute the installer:
 
 ```bash
-source <(curl -s https://raw.githubusercontent.com/misterbisson/couchbase-benchmark/master/bin/install-triton-centos.bash && source install-triton-centos.bash)
+echo -e "$(curl -s https://raw.githubusercontent.com/misterbisson/couchbase-benchmark/master/bin/install-triton-centos-env.bash)" >> .bash_profile && source .bash_profile
+curl https://raw.githubusercontent.com/misterbisson/couchbase-benchmark/master/bin/install-triton-centos.bash | bash
 ```
 
 ### Run the benchmarks

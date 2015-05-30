@@ -2,16 +2,8 @@
 
 # "I would turn ‘set -o xtrace’, and reopen stderr to a log file"
 
-# Figure out memory and cpu resources
-MYIPPRIVATE=$(ip addr show eth0 | grep -o '[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}')
-MYIPPUBLIC=$(ip addr show eth1 | grep -o '[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}')
-MYMEMORY=$(free -m | grep -o "Mem:\s*[0-9]*" | grep -o "[0-9]*")
-MYCPUS=$(nproc)
-MYCPUS=$(($MYCPUS>12?$(($MYMEMORY/2048)):$MYCPUS))
-MYCPUS=$(($MYCPUS>1?$MYCPUS:1))
-export COUCHBASE_NS_SERVER_VM_EXTRA_ARGS='["+S", "$($MYCPUS)"]'
-export ERL_AFLAGS="+S $MYCPUS"
-MYMEMORY=$(echo "$MYMEMORY*.80" | bc | grep -o "^[^\.]*")
+# Be sure to have the environment vars set. It's a step in the instructions, or you can do:
+# source <(curl -s https://raw.githubusercontent.com/misterbisson/couchbase-benchmark/master/bin/install-triton-centos-env.bash)
 
 echo '#'
 echo '# Installing Couchbase'
@@ -20,7 +12,6 @@ echo '#'
 CB_VERSION=3.0.1
 CB_RELEASE_URL=http://packages.couchbase.com/releases
 CB_PACKAGE=couchbase-server-community-3.0.1-centos6.x86_64.rpm
-PATH=$PATH:/opt/couchbase/bin:/opt/couchbase/bin/tools:/opt/couchbase/bin/install
 rpm --install $CB_RELEASE_URL/$CB_VERSION/$CB_PACKAGE
 
 # sleep just a moment to let the installation settle
