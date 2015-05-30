@@ -3,16 +3,25 @@
 # "I would turn ‘set -o xtrace’, and reopen stderr to a log file"
 
 # Set the environment vars and add them to the bash_profile for next time
-echo -e "$(curl -s https://raw.githubusercontent.com/misterbisson/couchbase-benchmark/master/bin/install-triton-centos-env.bash)" >> .bash_profile && source .bash_profile
+echo -e "$(curl -s https://raw.githubusercontent.com/misterbisson/couchbase-benchmark/master/bin/install-triton-centos-env.bash)" >> /root/.bash_profile && source /root/.bash_profile
 
 # We could also set the environment vars by
 # source <(curl -s https://raw.githubusercontent.com/misterbisson/couchbase-benchmark/master/bin/install-triton-centos-env.bash)
 
-echo '#'
-echo '# Installing Couchbase'
-echo '#'
+# install couchbase if it hasn't already been installed
+if [ ! -d "/opt/couchbase/" ]; then
+    echo '#'
+    echo '# Installing Couchbase'
+    echo '#'
 
-rpm --install $CB_RELEASE_URL/$CB_VERSION/$CB_PACKAGE
+    rpm --install $CB_RELEASE_URL/$CB_VERSION/$CB_PACKAGE
+
+    echo '#'
+    echo '# Waiting 13 seconds for the service to start'
+    echo '#'
+
+    sleep 13
+fi
 
 echo '#'
 echo '# Configuring Couchbase'

@@ -2,15 +2,20 @@
 
 ### Create a VM running CentOS
 
-```bash
-# Keyname and instance type
-export AWSKEYNAME=my-aws-key-name
-export AWSINSTANCETYPE=c4.large
+First, create a security group with the right ports open:
 
+```bash
 # Creating a security group for testing
 aws ec2 create-security-group --group-name couchbase-benchmarks --description "For benchmarking Couchbase, opens ports that should not be open in production"
 aws ec2 authorize-security-group-ingress --group-name couchbase-benchmarks --protocol tcp --port 22 --cidr 0.0.0.0/0
 aws ec2 authorize-security-group-ingress --group-name couchbase-benchmarks --protocol tcp --port 8091 --cidr 0.0.0.0/0
+```
+Now we can create the VM:
+
+```bash
+# Keyname and instance type
+export AWSKEYNAME=my-aws-key-name
+export AWSINSTANCETYPE=c4.large
 
 # Creating the VM instance
 AWSIID=$(aws ec2 run-instances \

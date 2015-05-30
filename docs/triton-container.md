@@ -39,3 +39,7 @@ curl https://raw.githubusercontent.com/misterbisson/couchbase-benchmark/master/b
 ```bash
 /opt/couchbase/bin/cbworkloadgen -n 127.0.0.1:8091 -r .9 -i 100000 -s 100 --threads 10 -j
 ```
+
+### Known bug
+
+Couchbase is trying to schedule across 48 CPUs, even though the container in the example above only has scheduling priority for two. That's causing performance bottlenecks.

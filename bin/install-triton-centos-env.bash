@@ -8,6 +8,7 @@ export MYCPUS=$(($MYCPUS>12?$(($MYMEMORY/2048)):$MYCPUS))
 export MYCPUS=$(($MYCPUS>1?$MYCPUS:1))
 export COUCHBASE_NS_SERVER_VM_EXTRA_ARGS=$(printf '["+S", "%s"]' $MYCPUS)
 export ERL_AFLAGS="+S $MYCPUS"
+export GOMAXPROCS=$MYCPUS
 export MYMEMORY=$(echo "$MYMEMORY*.80" | bc | grep -o "^[^\.]*")
 export CB_VERSION=3.0.1
 export CB_RELEASE_URL=http://packages.couchbase.com/releases
