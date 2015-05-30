@@ -3,13 +3,15 @@
 ### Create an infrastructure container running container-optimized CentOS
 
 ```bash
+curl -o couchbase-install-triton-centos.bash https://raw.githubusercontent.com/misterbisson/couchbase-benchmark/master/bin/install-triton-centos.bash
 sdc-createmachine \
     --url=https://us-east-3b.api.joyent.com  \
     --name=couchbase-container-benchmarks-1 \
     --image=$(sdc-listimages --url=https://us-east-3b.api.joyent.com | json -a -c "this.name === 'lx-centos-6'" id) \
     --package=$(sdc-listpackages --url=https://us-east-3b.api.joyent.com | json -a -c "this.memory === 4096" id) \
     --networks=$(sdc-listnetworks --url=https://us-east-3b.api.joyent.com | json -a -c "this.name ==='default'" id) \
-    --networks=$(sdc-listnetworks --url=https://us-east-3b.api.joyent.com | json -a -c "this.name ==='Joyent-SDC-Public'" id)
+    --networks=$(sdc-listnetworks --url=https://us-east-3b.api.joyent.com | json -a -c "this.name ==='Joyent-SDC-Public'" id) \
+    --script=./couchbase-install-triton-centos.bash
 ```
 
 ### Install and configure Couchbase
@@ -29,7 +31,6 @@ ssh root@$(sdc-listmachines --url=https://us-east-3b.api.joyent.com | json -a -c
 Execute the installer:
 
 ```bash
-echo -e "$(curl -s https://raw.githubusercontent.com/misterbisson/couchbase-benchmark/master/bin/install-triton-centos-env.bash)" >> .bash_profile && source .bash_profile
 curl https://raw.githubusercontent.com/misterbisson/couchbase-benchmark/master/bin/install-triton-centos.bash | bash
 ```
 
