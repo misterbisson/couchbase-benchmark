@@ -25,29 +25,4 @@ MYIPPUBLIC=$(curl http://169.254.169.254/latest/meta-data/public-ipv4)
 MYMEMORY=$(free -m | grep -o "Mem:\s*[0-9]*" | grep -o "[0-9]*")
 MYMEMORY=$(echo "$MYMEMORY*.80" | bc | grep -o "^[^\.]*")
 
-/opt/couchbase/bin/couchbase-cli node-init -c 127.0.0.1:8091 -u access -p password \
-    --node-init-data-path=/opt/couchbase/var/lib/couchbase/data \
-    --node-init-index-path=/opt/couchbase/var/lib/couchbase/data \
-    --node-init-hostname=$MYIPPRIVATE
-
-/opt/couchbase/bin/couchbase-cli cluster-init -c 127.0.0.1:8091 -u access -p password \
-    --cluster-init-username=Administrator \
-    --cluster-init-password=password \
-    --cluster-init-port=8091 \
-    --cluster-init-ramsize=$MYMEMORY
-
-/opt/couchbase/bin/couchbase-cli bucket-create -c 127.0.01:8091 -u Administrator -p password \
-   --bucket=default \
-   --bucket-type=couchbase \
-   --bucket-ramsize=$MYMEMORY \
-   --bucket-replica=1
-
-echo '#'
-echo '# Installed and configured'
-echo '#'
-echo "# Couchbase dashboard: http://$MYIPPUBLIC:8091"
-echo '# username=Administrator'
-echo '# password=password'
-echo '#'
-
-echo "Couchbase is installed, http://$MYIPPUBLIC:8091" > ~/couchbaseinstalled.txt
+curl -s https://raw.githubusercontent.com/misterbisson/couchbase-benchmark/master/bin/configure-couchbase.bash | bash -s $MYMEMORY $MYIPPRIVATE $MYIPPUBLIC
