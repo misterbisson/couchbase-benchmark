@@ -11,14 +11,13 @@ PATH=$PATH:/opt/couchbase/bin:/opt/couchbase/bin/tools:/opt/couchbase/bin/instal
 rpm --install $CB_RELEASE_URL/$CB_VERSION/$CB_PACKAGE
 
 echo '#'
-echo '# Waiting 13 seconds for the service to start'
+echo '# Waiting for Couchbase to start'
 echo '#'
-
-sleep 13
-
-echo '#'
-echo '# Configuring Couchbase'
-echo '#'
+while [ ! -f "/opt/couchbase/var/lib/couchbase/couchbase-server.pid" ]; do
+    echo -n '.'
+    sleep 1.3
+done
+sleep 2
 
 MYIPPRIVATE=$(curl http://169.254.169.254/latest/meta-data/local-ipv4)
 MYIPPUBLIC=$(curl http://169.254.169.254/latest/meta-data/public-ipv4)

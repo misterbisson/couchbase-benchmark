@@ -17,20 +17,17 @@ if [ ! -d "/opt/couchbase/" ]; then
 
     rpm --install $CB_RELEASE_URL/$CB_VERSION/$CB_PACKAGE
 
-    echo '#'
-    echo '# Waiting 13 seconds for the service to start'
-    echo '#'
-
-    sleep 13
+    sleep 3
 fi
 
-
-
-echo "# Waiting for Couchbase server to start."
+echo '#'
+echo '# Waiting for Couchbase to start'
+echo '#'
 while [ ! -f "/opt/couchbase/var/lib/couchbase/couchbase-server.pid" ]; do
     echo -n '.'
-    sleep 2
+    sleep 1.3
 done
+sleep 2
 
 # configure Couchbase
 curl -s https://raw.githubusercontent.com/misterbisson/couchbase-benchmark/master/bin/configure-couchbase.bash | bash -s $MYMEMORY benchmark $MYIPPRIVATE $MYIPPUBLIC
