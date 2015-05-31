@@ -42,6 +42,8 @@ cloud-benchmark setup -c couchbase://127.0.0.1
 
 echo '#'
 echo "# Executing benchmarks..."
+echo '#'
+echo '# If this fails, retry with:'
 echo "# cloud-benchmark run -d $(pwd) -c couchbase://127.0.0.1"
 echo '#'
 cloud-benchmark run -d . -c couchbase://127.0.0.1
