@@ -29,7 +29,7 @@ echo '# Testing to see if Couchbase is running yet'
 echo '#'
 
 COUCHBASERESPONSIVE=0
-while [ ! ($COUCHBASERESPONSIVE) ]; do
+while [ $COUCHBASERESPONSIVE != 1 ]; do
     echo -n '.'
     sleep .7
     couchbase-cli server-list -c 127.0.0.1:8091 -u access -p password &> /dev/null

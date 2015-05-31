@@ -34,7 +34,7 @@ ssh root@$(sdc-listmachines --url=https://us-east-3b.api.joyent.com | json -a -c
 echo -n "Waiting for host."; while [ "$CONTAINERIP" == '' ]; do echo -n '.'; CONTAINERIP=$(sdc-listmachines --url=https://us-east-3b.api.joyent.com | json -a -c "this.name === 'couchbase-container-benchmarks-1'" ips.1); sleep 0.7; done; echo; echo "Host created: $CONTAINERIP"; echo -n "Waiting for ssh to start."; for i in {1..7}; do echo -n '.'; sleep 0.7; done; echo; ssh root@$CONTAINERIP
 ```
 
-Execute the installer:
+Install and configure Couchbase:
 
 ```bash
 curl https://raw.githubusercontent.com/misterbisson/couchbase-benchmark/master/bin/install-triton-centos.bash | bash

@@ -34,7 +34,7 @@ Ssh in to the newly created instance:
 ssh ec2-user@$(aws ec2 describe-instances --instance-ids $AWSIID | json -a Reservations.0.Instances.0.PublicDnsName)
 ```
 
-Execute the installer:
+Install and configure Couchbase:
 
 ```bash
 curl https://raw.githubusercontent.com/misterbisson/couchbase-benchmark/master/bin/install-aws-amazonlinux.bash | sudo bash

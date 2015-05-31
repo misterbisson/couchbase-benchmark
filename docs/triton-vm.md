@@ -24,7 +24,7 @@ Lookup the IP address for this new instance and ssh in:
 ssh root@$(sdc-listmachines --url=https://us-east-2.api.joyent.com | json -a -c "this.name === 'couchbase-vm-benchmarks-1'" ips.1)
 ```
 
-Execute the installer:
+Install and configure Couchbase:
 
 ```bash
 curl https://raw.githubusercontent.com/misterbisson/couchbase-benchmark/master/bin/install-triton-centos.bash | bash
