@@ -3,7 +3,7 @@
 ### Create an infrastructure container running container-optimized CentOS
 
 ```bash
-curl -o couchbase-install-triton-centos.bash https://raw.githubusercontent.com/misterbisson/couchbase-benchmark/master/bin/install-triton-centos.bash
+curl -sL -o couchbase-install-triton-centos.bash https://raw.githubusercontent.com/misterbisson/couchbase-benchmark/master/bin/install-triton-centos.bash
 sdc-createmachine \
     --url=https://us-east-3b.api.joyent.com  \
     --name=couchbase-container-benchmarks-1 \
@@ -37,13 +37,13 @@ echo -n "Waiting for host."; while [ "$CONTAINERIP" == '' ]; do echo -n '.'; CON
 Install and configure Couchbase:
 
 ```bash
-curl https://raw.githubusercontent.com/misterbisson/couchbase-benchmark/master/bin/install-triton-centos.bash | bash
+curl -sL https://raw.githubusercontent.com/misterbisson/couchbase-benchmark/master/bin/install-triton-centos.bash | bash
 ```
 
 ### Run the benchmarks
 
 ```bash
-curl https://raw.githubusercontent.com/misterbisson/couchbase-benchmark/master/bin/benchmark.bash | bash
+curl -sL https://raw.githubusercontent.com/misterbisson/couchbase-benchmark/master/bin/benchmark.bash | bash
 ```
 
 ### Known bug

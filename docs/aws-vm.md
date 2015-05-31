@@ -37,11 +37,11 @@ ssh ec2-user@$(aws ec2 describe-instances --instance-ids $AWSIID | json -a Reser
 Install and configure Couchbase:
 
 ```bash
-curl https://raw.githubusercontent.com/misterbisson/couchbase-benchmark/master/bin/install-aws-amazonlinux.bash | sudo bash
+curl -sL https://raw.githubusercontent.com/misterbisson/couchbase-benchmark/master/bin/install-aws-amazonlinux.bash | sudo bash
 ```
 
 ### Run the benchmarks
 
 ```bash
-curl https://raw.githubusercontent.com/misterbisson/couchbase-benchmark/master/bin/benchmark.bash | sudo bash
+curl -sL https://raw.githubusercontent.com/misterbisson/couchbase-benchmark/master/bin/benchmark.bash | sudo bash
 ```

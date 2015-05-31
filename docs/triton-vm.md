@@ -3,7 +3,7 @@
 ### Create a VM running CentOS
 
 ```bash
-curl -o couchbase-install-triton-centos.bash https://raw.githubusercontent.com/misterbisson/couchbase-benchmark/master/bin/install-triton-centos.bash
+curl -sL -o couchbase-install-triton-centos.bash https://raw.githubusercontent.com/misterbisson/couchbase-benchmark/master/bin/install-triton-centos.bash
 sdc-createmachine \
     --url=https://us-east-2.api.joyent.com \
     --name=couchbase-vm-benchmarks-1 \
@@ -27,11 +27,11 @@ ssh root@$(sdc-listmachines --url=https://us-east-2.api.joyent.com | json -a -c 
 Install and configure Couchbase:
 
 ```bash
-curl https://raw.githubusercontent.com/misterbisson/couchbase-benchmark/master/bin/install-triton-centos.bash | bash
+curl -sL https://raw.githubusercontent.com/misterbisson/couchbase-benchmark/master/bin/install-triton-centos.bash | bash
 ```
 
 ### Run the benchmarks
 
 ```bash
-curl https://raw.githubusercontent.com/misterbisson/couchbase-benchmark/master/bin/benchmark.bash | bash
+curl -sL https://raw.githubusercontent.com/misterbisson/couchbase-benchmark/master/bin/benchmark.bash | bash
 ```
