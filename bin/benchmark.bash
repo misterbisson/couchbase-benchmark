@@ -21,6 +21,20 @@ curl -SLO "http://nodejs.org/dist/v$NODE_VERSION/node-v$NODE_VERSION-linux-x64.t
 	&& npm install -g npm@"$NPM_VERSION" \
 	&& npm cache clear
 
+# Amazon Linux needs this
+NPMINSTALLED=0
+while [ $NPMINSTALLED != 1 ]; do
+    echo -n '.'
+    sleep .7
+    hash -r
+
+    # test the default u/p
+    command -v npm &> /dev/null
+    if [ $? -eq 0 ]; then
+        let NPMINSTALLED=1
+    fi
+done
+
 npm install -g cb-cloud-benchmark --unsafe-perm
 
 echo '#'
