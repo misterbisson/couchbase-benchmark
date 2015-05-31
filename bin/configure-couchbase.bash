@@ -23,6 +23,7 @@ if [ "$(couchbase-cli bucket-list -c 127.0.0.1:8091 -u Administrator -p password
     exit
 fi
 
+echo
 echo '#'
 echo '# Configuring Couchbase'
 echo '#'

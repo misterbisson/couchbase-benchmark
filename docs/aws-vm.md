@@ -43,5 +43,5 @@ curl https://raw.githubusercontent.com/misterbisson/couchbase-benchmark/master/b
 ### Run the benchmarks
 
 ```bash
-/opt/couchbase/bin/cbworkloadgen -n 127.0.0.1:8091 -r .9 -i 100000 -s 100 --threads 10 -j
+curl https://raw.githubusercontent.com/misterbisson/couchbase-benchmark/master/bin/benchmark.bash | sudo bash
 ```
