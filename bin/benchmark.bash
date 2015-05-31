@@ -11,6 +11,7 @@ gpg --keyserver pool.sks-keyservers.net --recv-keys 7937DFD2AB06298B2293C3187D33
 
 NODE_VERSION=0.12.4
 NPM_VERSION=2.10.1
+PATH="$PATH:/usr/local/bin"
 
 curl -SLO "http://nodejs.org/dist/v$NODE_VERSION/node-v$NODE_VERSION-linux-x64.tar.gz" \
 	&& curl -SLO "http://nodejs.org/dist/v$NODE_VERSION/SHASUMS256.txt.asc" \
@@ -20,20 +21,6 @@ curl -SLO "http://nodejs.org/dist/v$NODE_VERSION/node-v$NODE_VERSION-linux-x64.t
 	&& rm -f "node-v$NODE_VERSION-linux-x64.tar.gz" SHASUMS256.txt.asc \
 	&& npm install -g npm@"$NPM_VERSION" \
 	&& npm cache clear
-
-# Amazon Linux needs this
-NPMINSTALLED=0
-while [ $NPMINSTALLED != 1 ]; do
-    echo -n '.'
-    sleep .7
-    hash -r
-
-    # test the default u/p
-    command -v npm &> /dev/null
-    if [ $? -eq 0 ]; then
-        let NPMINSTALLED=1
-    fi
-done
 
 npm install -g cb-cloud-benchmark --unsafe-perm
 
