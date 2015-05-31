@@ -25,10 +25,23 @@ fi
 
 echo
 echo '#'
-echo '# Configuring Couchbase'
+echo '# Testing to see if Couchbase is running yet'
 echo '#'
 
-#couchbase-cli server-list -c 127.0.0.1:8091 -u Administrator -p password
+COUCHBASERESPONSIVE=0
+while [ ! ($COUCHBASERESPONSIVE) ]; do
+    echo -n '.'
+    sleep .7
+    couchbase-cli server-list -c 127.0.0.1:8091 -u access -p password &> /dev/null
+    if [ $? -eq 0 ]; then
+        let COUCHBASERESPONSIVE=1
+    fi
+done
+
+echo
+echo '#'
+echo '# Configuring Couchbase'
+echo '#'
 
 /opt/couchbase/bin/couchbase-cli node-init -c 127.0.0.1:8091 -u access -p password \
     --node-init-data-path=/opt/couchbase/var/lib/couchbase/data \

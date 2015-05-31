@@ -26,6 +26,7 @@ npm install -g cb-cloud-benchmark --unsafe-perm
 echo '#'
 echo "# Getting source data..."
 echo '#'
+rm -Rf cb-cloud-benchmark-data-*
 curl -o data.zip -L https://github.com/corbinu/cb-cloud-benchmark-data/archive/79bd88b76cbf9cbec987d84f1ef6ad996973d526.zip
 unzip data.zip
 
