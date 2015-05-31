@@ -24,4 +24,15 @@ if [ ! -d "/opt/couchbase/" ]; then
     sleep 13
 fi
 
-curl -s https://raw.githubusercontent.com/misterbisson/couchbase-benchmark/master/bin/configure-couchbase.bash | bash -s $MYMEMORY $MYIPPRIVATE $MYIPPUBLIC
+
+
+echo "# Waiting for Couchbase server to start."
+while [ ! -f "/opt/couchbase/var/lib/couchbase/couchbase-server.pid" ]; do
+    echo -n '.'
+    sleep 2
+done
+
+# configure Couchbase
+curl -s https://raw.githubusercontent.com/misterbisson/couchbase-benchmark/master/bin/configure-couchbase.bash | bash -s $MYMEMORY benchmark $MYIPPRIVATE $MYIPPUBLIC
+
+echo "Couchbase is installed, http://$MYIPPUBLIC:8091" > /root/couchbase.txt

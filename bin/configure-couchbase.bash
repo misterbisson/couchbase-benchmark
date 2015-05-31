@@ -1,12 +1,33 @@
 #!/bin/bash
 
 MYMEMORY=$1
-MYIPPRIVATE=$2
-MYIPPUBLIC=$3
+BUCKET=$2
+MYIPPRIVATE=$3
+MYIPPUBLIC=$4
+
+installed ()
+{
+    echo '#'
+    echo '# Couchbase is installed and configured'
+    echo '#'
+    echo "# Dashboard: http://$MYIPPUBLIC:8091"
+    echo "# Internal IP: $MYIPPRIVATE"
+    echo "# Bucket: $BUCKET"
+    echo '# username=Administrator'
+    echo '# password=password'
+    echo '#'
+}
+
+if [ "$(couchbase-cli bucket-list -c 127.0.0.1:8091 -u Administrator -p password | grep ^$BUCKET)" == $BUCKET ]; then
+    installed
+    exit
+fi
 
 echo '#'
 echo '# Configuring Couchbase'
 echo '#'
+
+#couchbase-cli server-list -c 127.0.0.1:8091 -u Administrator -p password
 
 /opt/couchbase/bin/couchbase-cli node-init -c 127.0.0.1:8091 -u access -p password \
     --node-init-data-path=/opt/couchbase/var/lib/couchbase/data \
@@ -20,15 +41,9 @@ echo '#'
     --cluster-init-ramsize=$MYMEMORY
 
 /opt/couchbase/bin/couchbase-cli bucket-create -c 127.0.01:8091 -u Administrator -p password \
-   --bucket=default \
+   --bucket=$BUCKET \
    --bucket-type=couchbase \
    --bucket-ramsize=$MYMEMORY \
    --bucket-replica=1
 
-echo '#'
-echo '# Installed and configured'
-echo '#'
-echo "# Couchbase dashboard: http://$MYIPPUBLIC:8091"
-echo '# username=Administrator'
-echo '# password=password'
-echo '#'
+installed
