@@ -20,7 +20,7 @@ if [ ! -d "/opt/couchbase/" ]; then
     sleep 3
 fi
 
-if grep -Fxq 'CPU limits to keep Couchbase from trying to schedule across all the CPUs' /opt/couchbase/bin/couchbase-server
+if ! grep -q 'CPU limits to keep Couchbase from trying to schedule across all the CPUs' /opt/couchbase/bin/couchbase-server
 then
     echo '#'
     echo '# Setting CPU limits for Couchbase and restarting'
@@ -67,6 +67,7 @@ while [ $COUCHBASERESPONSIVE != 1 ]; do
     fi
 done
 sleep 2
+echo
 
 # set the number of writers
 /opt/couchbase/bin/cbepctl 127.0.0.1:11210 -b default set flush_param max_num_writers $(($MYCPUS>1?$MYCPUS/2:1))
