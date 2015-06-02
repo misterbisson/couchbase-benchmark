@@ -9,7 +9,7 @@ echo -e "$(curl -s https://raw.githubusercontent.com/misterbisson/couchbase-benc
 # We could also set the environment vars by
 # source <(curl -s https://raw.githubusercontent.com/misterbisson/couchbase-benchmark/master/bin/install-triton-centos-env.bash)
 
-# install couchbase if it hasn't already been installed
+# install Couchbase if it hasn't already been installed
 if [ ! -d "/opt/couchbase/" ]; then
     echo '#'
     echo '# Installing Couchbase'
@@ -40,7 +40,7 @@ cat /root/couchbase-server-config.tmp > /opt/couchbase/bin/couchbase-server
 rm -f /root/couchbase-server-config.tmp
 
 # restart Couchbase
-/etc/init.d/couchbase-server restart
+/etc/init.d/couchbase-server restart &> /dev/null
 
 echo '#'
 echo '# Waiting for Couchbase to start'
@@ -54,7 +54,6 @@ sleep 2
 
 # set the number of writers
 /opt/couchbase/bin/cbepctl 127.0.0.1:11210 -b default set flush_param max_num_writers $(($MYCPUS>1?$MYCPUS/2:1))
-
 
 # configure Couchbase
 curl -sL https://raw.githubusercontent.com/misterbisson/couchbase-benchmark/master/bin/configure-couchbase.bash | bash -s $MYMEMORY benchmark $MYIPPRIVATE $MYIPPUBLIC
