@@ -20,27 +20,30 @@ if [ ! -d "/opt/couchbase/" ]; then
     sleep 3
 fi
 
-echo '#'
-echo '# Setting CPU limits for Couchbase and restarting'
-echo '#'
+if grep -Fxq 'CPU limits to keep Couchbase from trying to schedule across all the CPUs' /opt/couchbase/bin/couchbase-server
+then
+    echo '#'
+    echo '# Setting CPU limits for Couchbase and restarting'
+    echo '#'
 
-# insert Triton-specific config details into the startup script
-cat /opt/couchbase/bin/couchbase-server | \
-sed "/export PATH/a export ERL_AFLAGS" | \
-sed "/export PATH/a ERL_AFLAGS='+S $MYCPUS'" | \
-sed "/export PATH/a export COUCHBASE_NS_SERVER_VM_EXTRA_ARGS" | \
-sed "/export PATH/a COUCHBASE_NS_SERVER_VM_EXTRA_ARGS=$(printf '["+S", "%s"]' $MYCPUS)" | \
-sed "/export PATH/a \# CPU limits to keep Couchbase from trying to schedule across all the CPUs it can see" | \
-sed '/export PATH/a
-' \
-> /root/couchbase-server-config.tmp
+    # insert Triton-specific config details into the startup script
+    cat /opt/couchbase/bin/couchbase-server | \
+    sed "/export PATH/a export ERL_AFLAGS" | \
+    sed "/export PATH/a ERL_AFLAGS='+S $MYCPUS'" | \
+    sed "/export PATH/a export COUCHBASE_NS_SERVER_VM_EXTRA_ARGS" | \
+    sed "/export PATH/a COUCHBASE_NS_SERVER_VM_EXTRA_ARGS=$(printf '["+S", "%s"]' $MYCPUS)" | \
+    sed "/export PATH/a \# CPU limits to keep Couchbase from trying to schedule across all the CPUs it can see" | \
+    sed '/export PATH/a
+    ' \
+    > /root/couchbase-server-config.tmp
 
-# copy the temp back to the primary and delete the temp
-cat /root/couchbase-server-config.tmp > /opt/couchbase/bin/couchbase-server
-rm -f /root/couchbase-server-config.tmp
+    # copy the temp back to the primary and delete the temp
+    cat /root/couchbase-server-config.tmp > /opt/couchbase/bin/couchbase-server
+    rm -f /root/couchbase-server-config.tmp
 
-# restart Couchbase
-/etc/init.d/couchbase-server restart &> /dev/null
+    # restart Couchbase
+    /etc/init.d/couchbase-server restart
+fi
 
 echo '#'
 echo '# Waiting for Couchbase to start'

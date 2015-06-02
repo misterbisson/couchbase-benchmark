@@ -31,7 +31,7 @@ ssh root@$(sdc-listmachines --url=https://us-east-3b.api.joyent.com | json -a -c
 ...or this will poll for the IP, then ssh in after it's up
 
 ```bash
-echo -n "Waiting for host."; while [ "$CONTAINERIP" == '' ]; do echo -n '.'; CONTAINERIP=$(sdc-listmachines --url=https://us-east-3b.api.joyent.com | json -a -c "this.name === 'couchbase-container-benchmarks-1'" ips.1); sleep 0.7; done; echo; echo "Host created: $CONTAINERIP"; echo -n "Waiting for ssh to start."; for i in {1..7}; do echo -n '.'; sleep 0.7; done; echo; ssh root@$CONTAINERIP
+echo -n "Waiting for host."; CONTAINERIP=''; while [ "$CONTAINERIP" == '' ]; do echo -n '.'; CONTAINERIP=$(sdc-listmachines --url=https://us-east-3b.api.joyent.com | json -a -c "this.name === 'couchbase-container-benchmarks-1'" ips.1); sleep 0.7; done; echo; echo "Host created: $CONTAINERIP"; echo -n "Waiting for ssh to start."; for i in {1..7}; do echo -n '.'; sleep 0.7; done; echo; ssh root@$CONTAINERIP
 ```
 
 Install and configure Couchbase:
