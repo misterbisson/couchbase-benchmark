@@ -55,50 +55,46 @@ curl -sL https://raw.githubusercontent.com/misterbisson/couchbase-benchmark/mast
 The result should look similar to the following:
 
 ```
-series 1: load test docs [====================] 300000/300000 100% 8.3s elapsed
+series 1: load test docs [====================] 300000/300000 100% 4.6s elapsed
 completed series 1
 
-series 2: load test docs [====================] 300000/300000 100% 7.6s elapsed
+series 2: load test docs [====================] 300000/300000 100% 4.4s elapsed
 completed series 2
 
-series 3: load test docs [====================] 300000/300000 100% 7.9s elapsed
+series 3: load test docs [====================] 300000/300000 100% 4.4s elapsed
 completed series 3
 
-series 4: load test docs [====================] 300000/300000 100% 7.0s elapsed
+series 4: load test docs [====================] 300000/300000 100% 4.5s elapsed
 completed series 4
 
-series 5: load test docs [====================] 300000/300000 100% 7.3s elapsed
+series 5: load test docs [====================] 300000/300000 100% 4.4s elapsed
 completed series 5
 
-series 6: load test docs [====================] 300000/300000 100% 8.7s elapsed
+series 6: load test docs [====================] 300000/300000 100% 4.5s elapsed
 completed series 6
 
-series 7: load test docs [====================] 300000/300000 100% 7.5s elapsed
+series 7: load test docs [====================] 300000/300000 100% 4.9s elapsed
 completed series 7
 
-series 8: load test docs [====================] 300000/300000 100% 8.8s elapsed
+series 8: load test docs [====================] 300000/300000 100% 4.4s elapsed
 completed series 8
 query people with SUVs
 people with SUVs: 342732
-people with SUVs in: 9322ms
+people with SUVs in: 4621ms
 query number of convertibles
 number of convertibles: 342446
-number of convertibles in: 346ms
+number of convertibles in: 132ms
 query average age
 average age: 42
-average age: 331ms
+average age: 129ms
 waiting 60 seconds to run queries again
 query people with SUVs
 people with SUVs: 342732
-people with SUVs in: 7041ms
+people with SUVs in: 4111ms
 query number of convertibles
 number of convertibles: 342446
-number of convertibles in: 343ms
+number of convertibles in: 130ms
 query average age
 average age: 42
-average age: 436ms
+average age: 129ms
 ```
-
-### Known bug
-
-Couchbase is trying to schedule across 48 CPUs, even though the container in the example above only has scheduling priority for two. That's causing performance bottlenecks.
