@@ -49,9 +49,22 @@ echo '#'
 echo '# Waiting for Couchbase to start'
 echo '#'
 
-while [ ! -f "/opt/couchbase/var/lib/couchbase/couchbase-server.pid" ]; do
+COUCHBASERESPONSIVE=0
+while [ $COUCHBASERESPONSIVE != 1 ]; do
     echo -n '.'
-    sleep 1.3
+
+    # test the default u/p
+    couchbase-cli server-info -c 127.0.0.1:8091 -u access -p password &> /dev/null
+    if [ $? -eq 0 ]; then
+        let COUCHBASERESPONSIVE=1
+    fi
+
+    # test the alternate u/p
+    couchbase-cli server-info -c 127.0.0.1:8091 -u Administrator -p password &> /dev/null
+    if [ $? -eq 0 ]; then
+        let COUCHBASERESPONSIVE=1
+        sleep .7
+    fi
 done
 sleep 2
 
