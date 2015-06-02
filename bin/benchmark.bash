@@ -3,6 +3,7 @@
 echo '#'
 echo "# Installing Node.js..."
 echo '#'
+
 yum install -q -y gcc-c++ make unzip
 
 # Node.js installation steps copied from https://github.com/joyent/docker-node/blob/428d5e69763aad1f2d8f17c883112850535e8290/0.12/Dockerfile
@@ -27,6 +28,7 @@ npm install -g cb-cloud-benchmark --unsafe-perm
 echo '#'
 echo "# Getting source data..."
 echo '#'
+
 rm -Rf cb-cloud-benchmark-data-*
 curl -o data.zip -L https://github.com/corbinu/cb-cloud-benchmark-data/archive/79bd88b76cbf9cbec987d84f1ef6ad996973d526.zip
 unzip data.zip
@@ -34,17 +36,22 @@ unzip data.zip
 echo '#'
 echo "# Uncompressing source data..."
 echo '#'
+
 cd cb-cloud-benchmark-data-* && ./expand.sh
 
 echo '#'
 echo "# Setting up views..."
 echo '#'
+
 cloud-benchmark setup -c couchbase://127.0.0.1
 
 echo '#'
 echo "# Executing benchmarks..."
 echo '#'
-echo '# If this fails, retry with:'
+echo '# This will automatically run five times. Retry after that with:'
 echo "# cloud-benchmark run -d $(pwd) -c couchbase://127.0.0.1"
 echo '#'
-cloud-benchmark run -d . -c couchbase://127.0.0.1
+
+for i in {1..5}; do
+    cloud-benchmark run -d . -c couchbase://127.0.0.1
+done
