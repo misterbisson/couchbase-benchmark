@@ -49,9 +49,13 @@ echo '#'
 echo "# Executing benchmarks..."
 echo '#'
 echo '# This will automatically run five times. Retry after that with:'
-echo "# cloud-benchmark run -d $(pwd) -c couchbase://127.0.0.1"
+echo "# time cloud-benchmark run -d $(pwd) -c couchbase://127.0.0.1"
 echo '#'
 
 for i in {1..5}; do
-    cloud-benchmark run -d . -c couchbase://127.0.0.1
+    time cloud-benchmark run -d . -c couchbase://127.0.0.1
+
+    echo '#'
+    echo "# Completed round $i"
+    echo '#'
 done
