@@ -69,9 +69,6 @@ done
 sleep 2
 echo
 
-# set the number of writers
-/opt/couchbase/bin/cbepctl 127.0.0.1:11210 -b default set flush_param max_num_writers $(($MYCPUS>1?$MYCPUS/2:1))
-
 # configure Couchbase
 curl -sL https://raw.githubusercontent.com/misterbisson/couchbase-benchmark/master/bin/configure-couchbase.bash | bash -s $MYMEMORY benchmark $MYIPPRIVATE $MYIPPUBLIC
 
