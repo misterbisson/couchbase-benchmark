@@ -15,7 +15,7 @@ Now we can create the VM:
 ```bash
 # Keyname and instance type
 export AWSKEYNAME=my-aws-key-name
-export AWSINSTANCETYPE=c4.xlarge
+export AWSINSTANCETYPE=c4.large
 
 # Creating the VM instance
 AWSIID=$(aws ec2 run-instances \
