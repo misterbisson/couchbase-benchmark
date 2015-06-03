@@ -70,6 +70,6 @@ sleep 2
 echo
 
 # configure Couchbase
-curl -sL https://raw.githubusercontent.com/misterbisson/couchbase-benchmark/master/bin/configure-couchbase.bash | bash -s $MYMEMORY benchmark $MYIPPRIVATE $MYIPPUBLIC
+curl -sL https://raw.githubusercontent.com/misterbisson/couchbase-benchmark/master/bin/configure-couchbase.bash | bash -s $MYMEMORY $MYCPUS benchmark $MYIPPRIVATE $MYIPPUBLIC
 
 echo "Couchbase is installed, http://$MYIPPUBLIC:8091" > /root/couchbase.txt

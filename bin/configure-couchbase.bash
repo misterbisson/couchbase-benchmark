@@ -1,9 +1,10 @@
 #!/bin/bash
 
 MYMEMORY=$1
-BUCKET=$2
-MYIPPRIVATE=$3
-MYIPPUBLIC=$4
+MYCPUS=$2
+BUCKET=$3
+MYIPPRIVATE=$4
+MYIPPUBLIC=$5
 
 installed ()
 {
@@ -72,11 +73,9 @@ echo '#'
    --bucket-replica=1
 
 # set the number of writers
-/opt/couchbase/bin/cbepctl 127.0.0.1:11210 -b $BUCKET set flush_param max_num_writers 1
-
-#/opt/couchbase/bin/cbepctl 127.0.0.1:11210 -b $BUCKET set flush_param max_num_writers 4
-#/opt/couchbase/bin/cbepctl 127.0.0.1:11210 -b $BUCKET set flush_param max_num_readers 4
-#/opt/couchbase/bin/cbepctl 127.0.0.1:11210 -b $BUCKET set flush_param max_num_auxio 1
-#/opt/couchbase/bin/cbepctl 127.0.0.1:11210 -b $BUCKET set flush_param max_num_nonio 1
+/opt/couchbase/bin/cbepctl 127.0.0.1:11210 -b $BUCKET set flush_param max_num_writers $(($MYCPUS>1?$MYCPUS/2:1))
+/opt/couchbase/bin/cbepctl 127.0.0.1:11210 -b $BUCKET set flush_param max_num_readers $(($MYCPUS>1?$MYCPUS/2:1))
+/opt/couchbase/bin/cbepctl 127.0.0.1:11210 -b $BUCKET set flush_param max_num_auxio 1
+/opt/couchbase/bin/cbepctl 127.0.0.1:11210 -b $BUCKET set flush_param max_num_nonio 1
 
 installed
