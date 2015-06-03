@@ -8,7 +8,7 @@ sdc-createmachine \
     --url=https://us-east-2.api.joyent.com \
     --name=couchbase-vm-benchmarks-1 \
     --image=$(sdc-listimages --url=https://us-east-2.api.joyent.com | json -a -c "this.name === 'lx-centos-6'" id) \
-    --package=$(sdc-listpackages --url=https://us-east-2.api.joyent.com | json -a -c '/^g/.test(this.name)' -c '/standard/.test(this.name)' -c '/(kvm)$/.test(this.name)' -c "this.memory === 4096" id) \
+    --package=$(sdc-listpackages --url=https://us-east-2.api.joyent.com | json -a -c '/^g/.test(this.name)' -c '/highmemory/.test(this.name)' -c '/(kvm)$/.test(this.name)' -c "this.memory === 17536" id) \
     --networks=$(sdc-listnetworks --url=https://us-east-2.api.joyent.com | json -a -c "this.name ==='Joyent-SDC-Private'" id) \
     --networks=$(sdc-listnetworks --url=https://us-east-2.api.joyent.com | json -a -c "this.name ==='Joyent-SDC-Public'" id) \
     --script=./couchbase-install-triton-centos.bash

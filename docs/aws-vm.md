@@ -15,13 +15,12 @@ Now we can create the VM:
 ```bash
 # Keyname and instance type
 export AWSKEYNAME=my-aws-key-name
-export AWSINSTANCETYPE=c4.large
 
 # Creating the VM instance
 AWSIID=$(aws ec2 run-instances \
     --image-id ami-e7527ed7 \
     --count 1 \
-    --instance-type $AWSINSTANCETYPE \
+    --instance-type r3.xlarge \
     --key-name $AWSKEYNAME \
     --security-group-ids $(aws ec2 describe-security-groups --group-names couchbase-benchmarks | json -a SecurityGroups.0.GroupId) | \
 json -aH Instances.0.InstanceId)
