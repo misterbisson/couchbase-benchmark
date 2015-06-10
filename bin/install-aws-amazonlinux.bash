@@ -22,7 +22,7 @@ sleep 2
 MYIPPRIVATE=$(curl http://169.254.169.254/latest/meta-data/local-ipv4)
 MYIPPUBLIC=$(curl http://169.254.169.254/latest/meta-data/public-ipv4)
 MYMEMORY=$(free -m | grep -o "Mem:\s*[0-9]*" | grep -o "[0-9]*")
-MYMEMORY=$(echo "$MYMEMORY*.80" | bc | grep -o "^[^\.]*")
+MYMEMORY=$((($MYMEMORY/10)*8))
 
 curl -s https://raw.githubusercontent.com/misterbisson/couchbase-benchmark/master/bin/configure-couchbase.bash | bash -s $MYMEMORY $(nproc) benchmark $MYIPPRIVATE $MYIPPUBLIC
 

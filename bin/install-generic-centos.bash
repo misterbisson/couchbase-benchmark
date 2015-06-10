@@ -4,7 +4,7 @@
 MYIPPRIVATE=$(ip addr show eth0 | grep -o '[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}')
 MYIPPUBLIC=MYIPPRIVATE
 MYMEMORY=$(free -m | grep -o "Mem:\s*[0-9]*" | grep -o "[0-9]*")
-MYMEMORY=$(echo "$MYMEMORY*.80" | bc | grep -o "^[^\.]*")
+MYMEMORY=$((($MYMEMORY/10)*8))
 
 PATH=$PATH:/opt/couchbase/bin:/opt/couchbase/bin/tools:/opt/couchbase/bin/install
 
