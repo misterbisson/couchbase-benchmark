@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# install tar, if not already installed
+yum install -q -y tar
+
 # Couchbase-related environment variables
 MYIPPRIVATE=$(ip addr show eth0 | grep -o '[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}')
 MYIPPUBLIC=MYIPPRIVATE

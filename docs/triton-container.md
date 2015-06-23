@@ -5,12 +5,11 @@
 ```bash
 curl -sL -o couchbase-install-triton-centos.bash https://raw.githubusercontent.com/misterbisson/couchbase-benchmark/master/bin/install-triton-centos.bash
 sdc-createmachine \
-    --url=https://us-east-3b.api.joyent.com  \
     --name=couchbase-container-benchmarks-1 \
-    --image=$(sdc-listimages --url=https://us-east-3b.api.joyent.com | json -a -c "this.name === 'lx-centos-6'" id) \
-    --package=$(sdc-listpackages --url=https://us-east-3b.api.joyent.com | json -a -c "this.memory === 16384" id) \
-    --networks=$(sdc-listnetworks --url=https://us-east-3b.api.joyent.com | json -a -c "this.name ==='default'" id) \
-    --networks=$(sdc-listnetworks --url=https://us-east-3b.api.joyent.com | json -a -c "this.name ==='Joyent-SDC-Public'" id) \
+    --image=$(sdc-listimages | json -a -c "this.name === 'centos-6' && this.type === 'smartmachine'" id | tail -1) \
+    --package=$(sdc-listpackages | json -a -c "this.memory === 16384 && /^t4/.test(this.name)" id | tail -1) \
+    --networks=$(sdc-listnetworks | json -a -c "this.name ==='default'" id) \
+    --networks=$(sdc-listnetworks | json -a -c "this.name ==='Joyent-SDC-Public'" id) \
     --script=./couchbase-install-triton-centos.bash
 ```
 
@@ -19,19 +18,19 @@ sdc-createmachine \
 Lookup the IP address for this new instance:
 
 ```bash
-sdc-listmachines --url=https://us-east-3b.api.joyent.com | json -a -c "this.name === 'couchbase-container-benchmarks-1'" ips.1
+sdc-listmachines  | json -a -c "this.name === 'couchbase-container-benchmarks-1'" ips.1
 ```
 
 ...or look it up and and ssh in one step:
 
 ```bash
-ssh root@$(sdc-listmachines --url=https://us-east-3b.api.joyent.com | json -a -c "this.name === 'couchbase-container-benchmarks-1'" ips.1)
+ssh root@$(sdc-listmachines  | json -a -c "this.name === 'couchbase-container-benchmarks-1'" ips.1)
 ```
 
 ...or this will poll for the IP, then ssh in after it's up
 
 ```bash
-echo -n "Waiting for host."; CONTAINERIP=''; while [ "$CONTAINERIP" == '' ]; do echo -n '.'; CONTAINERIP=$(sdc-listmachines --url=https://us-east-3b.api.joyent.com | json -a -c "this.name === 'couchbase-container-benchmarks-1'" ips.1); sleep 0.7; done; echo; echo "Host created: $CONTAINERIP"; echo -n "Waiting for ssh to start."; for i in {1..7}; do echo -n '.'; sleep 0.7; done; echo; ssh root@$CONTAINERIP
+echo -n "Waiting for host."; CONTAINERIP=''; while [ "$CONTAINERIP" == '' ]; do echo -n '.'; CONTAINERIP=$(sdc-listmachines  | json -a -c "this.name === 'couchbase-container-benchmarks-1'" ips.1); sleep 0.7; done; echo; echo "Host created: $CONTAINERIP"; echo -n "Waiting for ssh to start."; for i in {1..7}; do echo -n '.'; sleep 0.7; done; echo; ssh root@$CONTAINERIP
 ```
 
 Install and configure Couchbase:

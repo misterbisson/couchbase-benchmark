@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# install tar, if not already installed
+yum install -q -y tar
+
 # "I would turn ‘set -o xtrace’, and reopen stderr to a log file"
 # this script is run via /bin/bash /var/svc/mdata-user-script on startup, when called as a userscript during machine provisioning
 

@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# install tar, if not already installed
+yum install -q -y tar
+
 echo '#'
 echo '# Installing Couchbase'
 echo '#'
