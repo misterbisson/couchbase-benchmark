@@ -9,6 +9,7 @@ export MYCPUS=$(($MYCPUS>1?$MYCPUS:1))
 export COUCHBASE_NS_SERVER_VM_EXTRA_ARGS=$(printf '["+S", "%s"]' $MYCPUS)
 export ERL_AFLAGS="+S $MYCPUS"
 export GOMAXPROCS=$MYCPUS
+export MEMCACHED_NUM_CPUS=$MYCPUS
 export MYMEMORY=$((($MYMEMORY/10)*8))
 export CB_VERSION=3.0.1
 export CB_RELEASE_URL=http://packages.couchbase.com/releases
