@@ -1,7 +1,7 @@
 
 # Couchbase-related environment variables
-export MYIPPRIVATE=$(ip addr show eth0 | grep -o '[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}')
-export MYIPPUBLIC=$(ip addr show eth1 | grep -o '[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}')
+export MYIPPRIVATE=$(ip addr show | grep  "scope site dynamic" | grep -o '[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}')
+export MYIPPUBLIC=$(ip addr show | grep "scope global dynamic" | grep -o '[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}')
 export MYMEMORY=$(free -m | grep -o "Mem:\s*[0-9]*" | grep -o "[0-9]*")
 export MYCPUS=$(nproc)
 export MYCPUS=$(($MYCPUS>12?$(($MYMEMORY/3072)):$MYCPUS))
